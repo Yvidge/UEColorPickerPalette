@@ -1,0 +1,32 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"EngineVersion" : "5.2.0",
+	"FriendlyName": "Color Picker Palette",
+	"PlatformAllowList": [ "Win64", "Win32", "Mac", "IOS", "Android" ],
+	"Description": "This is a simple plugin that makes the work under the color guide easier.",
+	"Category": "UI",
+	"CreatedBy": "Yvidge",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ColorPickerPalette",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Android" ]
+		},
+		{
+			"Name": "ColorPickerPaletteRuntime",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Android" ]
+		}
+	]
+}
