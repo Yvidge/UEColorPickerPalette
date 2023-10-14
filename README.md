@@ -3,7 +3,7 @@ This is a simple UE plugin that makes the work under the color guide easier. It 
 
 Supported versions: tested on UE5.2, should work with all the latest versions.
 
-![Pasted image 20231014185645](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/9004ab13-b3de-453f-adc7-eca441878cd8)
+![ColorPicker](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/ec079e1e-5766-4a6a-ae11-eb1e445782c3)
 
 ## Table of Contents
 > - [Features](#features)  
@@ -12,7 +12,7 @@ Supported versions: tested on UE5.2, should work with all the latest versions.
 >    - [Per-user settings](#per-user-settings)  
 > - [How it works](#how-it-works)  
 > - [Known issues and limitations](#known-issues-and-limitations)
-> - [Why not just use the built-in color themes?](#why-not-just-use-the-built-in-color-themes?)  
+> - [Why not just use the built-in color themes?](#why-not-just-use-the-built-in-color-themes)  
 > - [Support](#support)  
 
 ## Features
@@ -20,7 +20,7 @@ Supported versions: tested on UE5.2, should work with all the latest versions.
 - Extended color picker. You can access all palettes while editing any color in any editor.
 - Unregistered color warnings. You will see warning icons if a color is not listed in any palette. This makes it easy to spot minor disagreements with the color guide.
    
-  ![Pasted image 20231014185720](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/d6feb6a8-6019-4e29-aca2-b29d101a60c5)
+  ![ColorWarning](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/55f0f2d8-57af-4c3f-8b44-9900fd20c6fe)
 - BP access to palettes if you want to change color from code.
 - `FStrictLinearColor` type that will only show registered colors while editing.
 ## Settings 
@@ -32,7 +32,8 @@ Not every team member may need functionality from this plugin, so it has flexibl
 - `bEnableColorWarnings` – When this flag is set, you will see warning icons in color properties. A warning will appear if the color is not listed in any Palettes or in `ColorWhitelist`.
 - `ColorWhitelist` – Whitelist for colors that you want neither to add to the palette nor to receive warnings about.
 - `bUseCompactMode` – Compact mode reduces the size of color blocks and palette names. It's recommended to enable this mode if you have more than 20 colors or more than 5 palettes.
-![Pasted image 20231014183348](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/dfc327b0-62d3-4b6e-b2cc-89ad5be36e6c)
+
+![ColorPickerCompactMode](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/a90996e7-d4a5-47d3-9be1-7bd7c1919f42)
 
 ## How it works
 The core of the plugin consists of a few `FPropertyTypeCustomization` inherited from `FColorStructCustomization`. Our property customizations are registered in the editor module on the `PostEngineInit` loading phase, overriding default ones.
