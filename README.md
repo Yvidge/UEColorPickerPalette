@@ -47,4 +47,4 @@ Due to implementation, the plugin's functionality only works for properties. So 
 They are ugly, saved per-user, and super messy if you have more than 10 colors. If you've ever noticed that they exist, of course.
 
 ## Support 
-Please support me if you enjoyed using this plugin or if you are using it as a company. You can buy this plugin on the marketplace.
+Please support me if you enjoyed using this plugin or if you are using it as a company. You can buy this plugin on the marketplace. (Link will be here a bit later)
