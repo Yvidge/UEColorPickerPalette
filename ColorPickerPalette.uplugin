@@ -20,13 +20,13 @@
 			"Name": "ColorPickerPalette",
 			"Type": "Editor",
 			"LoadingPhase": "PostEngineInit",
-			"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Android" ]
+			"WhitelistPlatforms": [ "Win64", "Mac", "IOS", "Android" ]
 		},
 		{
 			"Name": "ColorPickerPaletteRuntime",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"WhitelistPlatforms": [ "Win64", "Win32", "Mac", "IOS", "Android" ]
+			"WhitelistPlatforms": [ "Win64", "Mac", "IOS", "Android" ]
 		}
 	]
 }

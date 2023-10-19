@@ -7,7 +7,7 @@
 #include "ColorPickerPaletteUserSettings.generated.h"
 
 
-UCLASS(Config=EditorPerProjectUserSettings, defaultconfig, meta = (DisplayName="Color Picker User Settings"))
+UCLASS(Config=EditorPerProjectUserSettings, meta = (DisplayName="Color Picker User Settings"))
 class COLORPICKERPALETTE_API UColorPickerPaletteUserSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
