@@ -32,6 +32,9 @@ void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>
 
 	TWeakPtr<IPropertyHandle> StructWeakHandlePtr = InStructPropertyHandle;
 	
+	StructWeakHandlePtr.Pin()->SetOnPropertyResetToDefault(FSimpleDelegate::CreateRaw(this, &FColorStructPaletteCustomization::UpdateWarning));
+	StructWeakHandlePtr.Pin()->SetOnChildPropertyValueChanged(FSimpleDelegate::CreateRaw(this, &FColorStructPaletteCustomization::UpdateWarning));
+	
 	if (InStructPropertyHandle->HasMetaData("InlineColorPicker"))
 	{
 		ColorWidget = CreateInlineColorPicker(StructWeakHandlePtr);
@@ -279,5 +282,10 @@ EVisibility FColorStructPaletteCustomization::GetWarnIconVisibility() const
 void FColorStructPaletteCustomization::UpdateColor(FLinearColor NewColor)
 {
 	CreatedColorPicker->SetTargetColor(NewColor);
+}
+
+void FColorStructPaletteCustomization::UpdateWarning()
+{
+	ColorWarnIcon.Get()->SetVisibility(GetWarnIconVisibility());
 }
 

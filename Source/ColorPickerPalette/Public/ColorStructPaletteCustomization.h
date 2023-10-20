@@ -38,6 +38,7 @@ protected:
 	
 
 	void UpdateColor(FLinearColor NewColor);
+	void UpdateWarning();
 
 protected:
 	TSharedPtr<SPaletteColorPicker> CreatedColorPicker;

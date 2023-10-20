@@ -117,6 +117,9 @@ void FSlateColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<class IProp
 				CreateWarningIcon()
 			]
 		];
+	
+	StructPropertyHandle->SetOnPropertyResetToDefault(FSimpleDelegate::CreateRaw(this, &FSlateColorStructPaletteCustomization::UpdateWarning));
+	StructPropertyHandle->SetOnChildPropertyValueChanged(FSimpleDelegate::CreateRaw(this, &FSlateColorStructPaletteCustomization::UpdateWarning));
 }
 
 void FSlateColorStructPaletteCustomization::OnValueChanged()
