@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ColorPaletteRuntimeTypes.h"
-#include "..\ColorPickerPaletteUserData.h"
+#include "ColorPickerPaletteUserData.h"
 #include "Widgets/SCompoundWidget.h"
 
 class SWrapBox;
