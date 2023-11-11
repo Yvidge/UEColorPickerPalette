@@ -1,4 +1,6 @@
-﻿using UnrealBuildTool;
+﻿// Copyright 2023 Yvidge. All Rights Reserved.
+
+using UnrealBuildTool;
 
 public class ColorPickerPaletteRuntime : ModuleRules
 {

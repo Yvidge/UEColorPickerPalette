@@ -1,4 +1,4 @@
-﻿// Copyright Yvidge. All right reserved  
+﻿// Copyright 2023 Yvidge. All Rights Reserved.
 
 #pragma once
 
