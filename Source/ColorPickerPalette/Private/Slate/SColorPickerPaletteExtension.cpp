@@ -27,6 +27,8 @@ void SColorPickerPaletteExtension::Construct(const FArguments& InArgs)
 		.WidthOverride(450.f)
 		.Padding(5.f)
 		.MaxDesiredHeight(450.f)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
 		[
 			SAssignNew(PaletteWrapBox, SScrollBox)
 			.Orientation(Orient_Vertical)
@@ -45,11 +47,10 @@ void SColorPickerPaletteExtension::GeneratePalettes()
 	
 	if(Palettes.Num() == 0)
 	{
-		FSlateFontInfo Font = FAppStyle::Get().GetFontStyle("Bold");
+		FSlateFontInfo Font = FCoreStyle::Get().GetFontStyle("Bold");
 		Font.Size = 24;
 		
 		PaletteWrapBox->AddSlot()
-		.FillSize(1.f)
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Center)
 		.Padding(40.f, 0.f)

@@ -21,6 +21,7 @@ public class ColorPickerPalette : ModuleRules
 				"PropertyEditor",
 				"InputCore",
 				"DeveloperSettings",
+				"EditorStyle"
 			}
 		);
 			

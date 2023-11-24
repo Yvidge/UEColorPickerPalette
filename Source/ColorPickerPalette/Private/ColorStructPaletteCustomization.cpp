@@ -18,6 +18,8 @@
 #include "Widgets/Images/SImage.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Text/STextBlock.h"
+#include "Styling/CoreStyle.h"
+#include "EditorStyleSet.h"
 
 
 TSharedRef<IPropertyTypeCustomization> FColorStructPaletteCustomization::MakeInstance()
@@ -28,7 +30,7 @@ TSharedRef<IPropertyTypeCustomization> FColorStructPaletteCustomization::MakeIns
 void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>& InStructPropertyHandle, FDetailWidgetRow& Row)
 {
 	TSharedPtr<SWidget> ColorWidget;
-	float ContentWidth = 125.0f;
+	float ContentWidth = 250.0f;
 
 	TWeakPtr<IPropertyHandle> StructWeakHandlePtr = InStructPropertyHandle;
 	
@@ -56,7 +58,7 @@ void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>
 
 		// Color block
 		+ SHorizontalBox::Slot()
-		.AutoWidth()
+		.FillWidth(1.f)
 		[
 			ColorWidget.ToSharedRef()
 		]
@@ -64,6 +66,7 @@ void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>
 		// Warning icon
 		+ SHorizontalBox::Slot()
 		.AutoWidth()
+		.Padding(2.f, 0.f, 0.f, 0.f)
 		.VAlign(VAlign_Center)
 		[
 			CreateWarningIcon()
@@ -71,61 +74,64 @@ void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>
 	];
 }
 
-TSharedRef<SWidget> FColorStructPaletteCustomization::CreateColorBlock(
-	TWeakPtr<IPropertyHandle> StructWeakHandlePtr)
+TSharedRef<SWidget> FColorStructPaletteCustomization::CreateColorBlock(TWeakPtr<IPropertyHandle> StructWeakHandlePtr)
 {
-	return
-		SNew(SBox)
-		.Padding(FMargin(0.f,0.f,4.0f,0.0f))
+	FSlateFontInfo NormalText = IDetailLayoutBuilder::GetDetailFont();
+
+	return SNew(SHorizontalBox)
+		+ SHorizontalBox::Slot()
 		.VAlign(VAlign_Center)
+		.Padding(0.0f, 2.0f)
 		[
-			SAssignNew(ColorWidgetBackgroundBorder, SBorder)
-			.Padding(1)
-			.BorderImage(FAppStyle::Get().GetBrush("ColorPicker.RoundedSolidBackground"))
-			.BorderBackgroundColor(this, &FColorStructPaletteCustomization::GetColorWidgetBorderColor)
+			SNew(SOverlay)
+			+SOverlay::Slot()
+			[
+				// Displays the color with alpha unless it is ignored
+				SAssignNew(ColorPickerParentWidget, SColorBlock)
+				.Color(this, &FColorStructPaletteCustomization::OnGetColorForColorBlock)
+				.ShowBackgroundForAlpha(true)
+				.IgnoreAlpha(bIgnoreAlpha)
+				.OnMouseButtonDown(this, &FColorStructPaletteCustomization::OnMouseButtonDownColorBlock)
+				.Size(FVector2D(35.0f, 12.0f))
+				.IsEnabled(this, &FColorStructPaletteCustomization::IsValueEnabled, StructWeakHandlePtr)
+			]
+			+SOverlay::Slot()
+			.HAlign(HAlign_Center)
 			.VAlign(VAlign_Center)
 			[
-				SNew(SOverlay)
-				+ SOverlay::Slot()
-				.VAlign(VAlign_Center)
-				[
-					SAssignNew(ColorPickerParentWidget, SColorBlock)
-					.AlphaBackgroundBrush(FAppStyle::Get().GetBrush("ColorPicker.RoundedAlphaBackground"))
-					.Color(this, &FColorStructPaletteCustomization::OnGetColorForColorBlock)
-					.ShowBackgroundForAlpha(true)
-					.AlphaDisplayMode(bIgnoreAlpha ? EColorBlockAlphaDisplayMode::Ignore : EColorBlockAlphaDisplayMode::Separate)
-					.OnMouseButtonDown(this, &FColorStructPaletteCustomization::OnMouseButtonDownColorBlock)
-					.Size(FVector2D(70.0f, 20.0f))
-					.CornerRadius(FVector4(4.0f,4.0f,4.0f,4.0f))
-					.IsEnabled(this, &FColorStructPaletteCustomization::IsValueEnabled, StructWeakHandlePtr)
-				]
-				+ SOverlay::Slot()
-				.VAlign(VAlign_Center)
-				[
-					SNew(SBorder)
-					.Visibility(this, &FColorStructPaletteCustomization::GetMultipleValuesTextVisibility)
-					.BorderImage(FAppStyle::Get().GetBrush("ColorPicker.MultipleValuesBackground"))
-					.VAlign(VAlign_Center)
-					.ForegroundColor(FAppStyle::Get().GetWidgetStyle<FEditableTextBoxStyle>("NormalEditableTextBox").ForegroundColor)
-					.Padding(FMargin(12.0f, 2.0f))
-					[
-						SNew(STextBlock)
-						.Text(NSLOCTEXT("PropertyEditor", "MultipleValues", "Multiple Values"))
-						.Font(IDetailLayoutBuilder::GetDetailFont())
-					]
-				]
+				SNew(STextBlock)
+				.Text(NSLOCTEXT("PropertyEditor", "MultipleValues", "Multiple Values"))
+				.Font(NormalText)
+				.ColorAndOpacity(FSlateColor(FLinearColor::Black)) // we know the background is always white, so can safely set this to black
+				.Visibility(this, &FColorStructPaletteCustomization::GetMultipleValuesTextVisibility)
 			]
+		]
+		+ SHorizontalBox::Slot()
+		.VAlign(VAlign_Center)
+		.Padding(0.0f, 2.0f)
+		[
+			// Displays the color without alpha
+			SNew(SColorBlock)
+			.Color(this, &FColorStructPaletteCustomization::OnGetColorForColorBlock)
+			.ShowBackgroundForAlpha(false)
+			.IgnoreAlpha(true)
+			.OnMouseButtonDown(this, &FColorStructPaletteCustomization::OnMouseButtonDownColorBlock)
+			.Size(FVector2D(35.0f, 12.0f))
 		];
 }
 
 TSharedRef<SWidget> FColorStructPaletteCustomization::CreateWarningIcon()
 {
-	return SAssignNew(ColorWarnIcon, SImage)
-		.Image(FAppStyle::GetBrush("Icons.Error"))
-		.ToolTipText(INVTEXT("Warning: This color is not registered in project settings. \nCheck ColorPickerPaletteSettings \nYou can disable this warning or setup whitelist in Editor Preferences"))
-		.Visibility(GetWarnIconVisibility())
-		.DesiredSizeOverride(FVector2D(20.f, 20.f))
-		.ColorAndOpacity(FLinearColor::Yellow);
+	return
+		SNew(SBox)
+		.MinDesiredHeight(20.f)
+		.MinDesiredWidth(20.f)
+		[
+			SAssignNew(ColorWarnIcon, SImage)
+			.Image(FEditorStyle::GetBrush("Icons.Error"))
+			.ToolTipText(INVTEXT("Warning: This color is not registered in project settings. \nCheck ColorPickerPaletteSettings \nYou can disable this warning or setup whitelist in Editor Preferences"))
+			.Visibility(GetWarnIconVisibility())
+		];
 }
 
 TSharedRef<SWidget> FColorStructPaletteCustomization::CreateCustomizationWidget(TSharedPtr<SWindow> Window)
@@ -236,7 +242,7 @@ void FColorStructPaletteCustomization::CreateColorPickerWithPalette()
 
 	
 	TSharedRef<SBorder> WindowContent = SNew(SBorder)
-			.BorderImage(FAppStyle::Get().GetBrush("Brushes.Panel"))
+			.BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
 			.Padding(FMargin(8.0f, 8.0f));
 	
 	TSharedPtr<SWindow> Window = SNew(SWindow)

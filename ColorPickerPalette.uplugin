@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"EngineVersion" : "5.2.0",
+	"EngineVersion" : "4.27.0",
 	"FriendlyName": "Color Picker Palette",
 	"PlatformAllowList": [ "Win64", "Mac", "IOS", "Android" ],
 	"Description": "This is a simple plugin that makes the work under the color guide easier.",

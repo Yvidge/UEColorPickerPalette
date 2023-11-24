@@ -8,12 +8,12 @@
 #include "SlateOptMacros.h"
 #include "Components/VerticalBox.h"
 #include "Slate/SColorPaletteBlock.h"
-#include "Styling/AppStyle.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Layout/SWrapBox.h"
 #include "Widgets/Text/STextBlock.h"
+#include "Styling/CoreStyle.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -25,9 +25,9 @@ void SColorPalette::Construct(const FArguments& InArgs)
 	ColorPaletteUserData = InArgs._ColorPaletteUserData;
 	bCollapsed = ColorPaletteUserData.Get().bCollapsed;
 
-	FSlateFontInfo NameFont = FAppStyle::Get().GetFontStyle("Bold");
+	FSlateFontInfo NameFont = FCoreStyle::Get().GetFontStyle("Bold");
 	NameFont.Size = UColorPickerPaletteUserSettings::Get()->bUseCompactMode ? 16 : 24;
-	const FSlateFontInfo DescriptionFont = FAppStyle::Get().GetFontStyle("Regular");
+	const FSlateFontInfo DescriptionFont = FCoreStyle::Get().GetFontStyle("Regular");
 
 	ChildSlot
 	[
@@ -58,11 +58,12 @@ void SColorPalette::Construct(const FArguments& InArgs)
 				.VAlign(VAlign_Center)
 				.HAlign(HAlign_Center)
 				.ClickMethod(EButtonClickMethod::MouseDown)
+				.ForegroundColor( FSlateColor::UseForeground() )
 				.IsFocusable(false)
 				[
 					SNew(SImage)
 					.Image(this, &SColorPalette::GetExpanderImage)
-					.ColorAndOpacity(FSlateColor::UseSubduedForeground())
+					.ColorAndOpacity( FSlateColor::UseForeground() )
 				]
 			]
 		]
@@ -108,6 +109,7 @@ void SColorPalette::GenerateColorBlocks()
 				SNew(SColorPaletteBlock)
 				.Color(Color)
 				.OnSelectColor(OnSelectColor)
+				.UseSRGB(true)
 			]
 		];
 	};
@@ -173,7 +175,7 @@ const FSlateBrush* SColorPalette::GetExpanderImage() const
 		}
 	}
 
-	return FAppStyle::Get().GetBrush(ResourceName);
+	return FCoreStyle::Get().GetBrush(ResourceName);
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

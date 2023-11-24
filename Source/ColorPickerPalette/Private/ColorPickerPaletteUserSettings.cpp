@@ -86,5 +86,5 @@ const FColorPickerPaletteUserData& UColorPickerPaletteUserSettings::GetPaletteUs
 
 void UColorPickerPaletteUserSettings::SaveConfig()
 {
-	TryUpdateDefaultConfigFile(GEditorPerProjectIni);
+	UpdateDefaultConfigFile(GEditorPerProjectIni);
 }

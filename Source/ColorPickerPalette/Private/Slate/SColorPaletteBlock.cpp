@@ -21,8 +21,8 @@ void SColorPaletteBlock::Construct(const FArguments& InArgs)
 	OnSelectColor = InArgs._OnSelectColor;
 	bUseSRGB = InArgs._UseSRGB;
 
-	const FSlateFontInfo SmallLayoutFont = FAppStyle::Get().GetFontStyle("Regular");
-	const FSlateFontInfo SmallLabelFont = FAppStyle::Get().GetFontStyle("Bold");
+	const FSlateFontInfo SmallLayoutFont = FCoreStyle::Get().GetFontStyle("Regular");
+	const FSlateFontInfo SmallLabelFont = FCoreStyle::Get().GetFontStyle("Bold");
 	
 	this->ChildSlot
 	[
@@ -37,7 +37,6 @@ void SColorPaletteBlock::Construct(const FArguments& InArgs)
 				
 				SNew(SColorBlock)
 				.Color(this, &SColorPaletteBlock::GetColor)
-				.AlphaDisplayMode(EColorBlockAlphaDisplayMode::Separate)
 				.ColorIsHSV(false)
 				.ShowBackgroundForAlpha(true)
 				.UseSRGB(bUseSRGB)
