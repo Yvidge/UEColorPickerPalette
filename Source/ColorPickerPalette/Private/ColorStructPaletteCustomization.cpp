@@ -27,6 +27,19 @@ TSharedRef<IPropertyTypeCustomization> FColorStructPaletteCustomization::MakeIns
 	return  MakeShareable(new FColorStructPaletteCustomization);
 }
 
+FColorStructPaletteCustomization::~FColorStructPaletteCustomization()
+{
+	if(GWorld)
+	{
+		GWorld->GetTimerManager().ClearTimer(WindowDestroyTimer);
+	}
+	
+	if(ColorPickerWindow.IsValid())
+	{
+		ColorPickerWindow.Pin()->RequestDestroyWindow();
+	}
+}
+
 void FColorStructPaletteCustomization::MakeHeaderRow(TSharedRef<IPropertyHandle>& InStructPropertyHandle, FDetailWidgetRow& Row)
 {
 	TSharedPtr<SWidget> ColorWidget;
@@ -155,9 +168,9 @@ TSharedRef<SWidget> FColorStructPaletteCustomization::CreateCustomizationWidget(
 		.sRGBOverride(sRGBOverride)
 		.TargetColorAttribute(InitialColor)
 		.ExpandAdvancedSection(true)
-		.ParentWindow(Window);
+		.ParentWindow(Window)
+		.OptionalOwningDetailsView(ColorPickerParentWidget);
 	
-
 	if(!UColorPickerPaletteUserSettings::Get()->bEnableColorPickerExtension)
 	{
 		return CreatedColorPicker.ToSharedRef();
@@ -210,6 +223,26 @@ FReply FColorStructPaletteCustomization::OnMouseButtonDownColorBlock(const FGeom
 	return FReply::Handled();
 }
 
+void FColorStructPaletteCustomization::OnColorPickerWindowDeactivated()
+{
+	if(this)
+	{
+		if(GWorld)
+		{
+			FTimerDelegate Delegate;
+			Delegate.BindLambda([this]()
+			{
+				if(ColorPickerWindow.IsValid())
+				{
+					ColorPickerWindow.Pin()->RequestDestroyWindow();
+					ColorPickerWindow.Reset();
+				}
+			});
+			GWorld->GetTimerManager().SetTimer(WindowDestroyTimer, Delegate, 0.1f, false);
+		}
+	}
+}
+
 void FColorStructPaletteCustomization::CreateColorPickerWithPalette()
 {
 	GEditor->BeginTransaction(FText::Format(INVTEXT("Edit {0}"), StructPropertyHandle->GetPropertyDisplayName()));
@@ -245,22 +278,31 @@ void FColorStructPaletteCustomization::CreateColorPickerWithPalette()
 			.BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
 			.Padding(FMargin(8.0f, 8.0f));
 	
-	TSharedPtr<SWindow> Window = SNew(SWindow)
-		.AutoCenter(EAutoCenter::None)
-		.ScreenPosition(AdjustedSummonLocation)
-		.SupportsMaximize(false)
-		.SupportsMinimize(false)
-		.SizingRule(ESizingRule::Autosized)
-		.Title(INVTEXT("Color Picker"))
-		[
-			WindowContent
-		];
+	TSharedPtr<SWindow> Window = nullptr;
 
-	ColorPickerWindow = Window;
+	SAssignNew(Window, SWindow)
+	.AutoCenter(EAutoCenter::None)
+	.ScreenPosition(AdjustedSummonLocation)
+	.SupportsMaximize(false)
+	.SupportsMinimize(false)
+	.SizingRule(ESizingRule::Autosized)
+	.Title(INVTEXT("Color Picker"))
+	[
+		WindowContent
+	];
 
+	if(GWorld)
+	{
+		GWorld->GetTimerManager().ClearTimer(WindowDestroyTimer);
+	}
+	
+	Window.Get()->GetOnWindowDeactivatedEvent().AddRaw(this, &FColorStructPaletteCustomization::OnColorPickerWindowDeactivated);
+	
 	WindowContent->SetContent(CreateCustomizationWidget(Window));
 	
-	FSlateApplication::Get().AddModalWindow(Window.ToSharedRef(), ColorPickerParentWidget);
+	FSlateApplication::Get().AddWindow(Window.ToSharedRef());
+	
+	ColorPickerWindow = Window;
 }
 
 EVisibility FColorStructPaletteCustomization::GetWarnIconVisibility() const
@@ -294,4 +336,3 @@ void FColorStructPaletteCustomization::UpdateWarning()
 {
 	ColorWarnIcon.Get()->SetVisibility(GetWarnIconVisibility());
 }
-
