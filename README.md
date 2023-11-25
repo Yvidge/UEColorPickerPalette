@@ -1,7 +1,8 @@
 # Color Picker Palettes
 This is a simple UE plugin that makes the work under the color guide easier. It extends the color picker, so you can easily access predefined colors straight from the editor.
 
-Supported versions: tested on UE5.2, should work with all the latest versions.
+Supported versions: tested on `UE5.2`, should work with all the latest versions.  
+Update: ported to `UE4.27`
 
 ![ColorPicker](https://github.com/HInquisition/UEColorPickerPalette/assets/64382796/ec079e1e-5766-4a6a-ae11-eb1e445782c3)
 
