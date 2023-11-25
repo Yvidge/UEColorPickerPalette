@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Customizations/ColorStructCustomization.h"
-#include "Engine/TimerHandle.h"
+#include "Engine/EngineTypes.h"
 
 class SPaletteColorPicker;
 
@@ -27,7 +27,7 @@ protected:
 
 	TSharedRef<SWidget> CreateWarningIcon();
 	EVisibility GetWarnIconVisibility() const;
-	
+
 	virtual void OnSetColorFromColorPicker(FLinearColor NewColor);
 
 	// Override color picker creation
@@ -37,10 +37,10 @@ protected:
 
 	void CreateColorPickerWithPalette();
 	virtual TSharedRef<SWidget> CreateCustomizationWidget(TSharedPtr<SWindow> Window);
-	
+
 	// Size used to adjust window summon location
 	virtual FVector2D GetColorPickerDefaultWindowSize() const;
-	
+
 
 	void UpdateColor(FLinearColor NewColor);
 	void UpdateWarning();
@@ -51,5 +51,4 @@ protected:
 	TWeakPtr<SWindow> ColorPickerWindow;
 
 	FTimerHandle WindowDestroyTimer;
-	
 };
