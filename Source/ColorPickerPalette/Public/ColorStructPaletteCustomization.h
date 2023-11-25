@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Customizations/ColorStructCustomization.h"
+#include "Engine/TimerHandle.h"
 
 class SPaletteColorPicker;
 
@@ -14,7 +15,9 @@ class COLORPICKERPALETTE_API FColorStructPaletteCustomization : public FColorStr
 {
 public:
 	static TSharedRef<IPropertyTypeCustomization> MakeInstance();
-	
+
+	virtual ~FColorStructPaletteCustomization() override;
+
 protected:
 	// Add warning icon to default header row
 	virtual void MakeHeaderRow(TSharedRef<IPropertyHandle>& InStructPropertyHandle, FDetailWidgetRow& Row) override;
@@ -30,6 +33,8 @@ protected:
 	// Override color picker creation
 	FReply OnMouseButtonDownColorBlock(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
+	void OnColorPickerWindowDeactivated();
+
 	void CreateColorPickerWithPalette();
 	virtual TSharedRef<SWidget> CreateCustomizationWidget(TSharedPtr<SWindow> Window);
 	
@@ -44,5 +49,7 @@ protected:
 	TSharedPtr<SPaletteColorPicker> CreatedColorPicker;
 	TSharedPtr<SImage> ColorWarnIcon;
 	TWeakPtr<SWindow> ColorPickerWindow;
+
+	FTimerHandle WindowDestroyTimer;
 	
 };
