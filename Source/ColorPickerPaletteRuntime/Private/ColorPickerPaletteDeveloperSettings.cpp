@@ -8,3 +8,8 @@ const UColorPickerPaletteDeveloperSettings* UColorPickerPaletteDeveloperSettings
 {
 	return GetDefault<UColorPickerPaletteDeveloperSettings>();
 }
+
+UColorPickerPaletteDeveloperSettings* UColorPickerPaletteDeveloperSettings::GetMutable()
+{
+	return GetMutableDefault<UColorPickerPaletteDeveloperSettings>();
+}

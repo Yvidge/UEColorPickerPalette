@@ -98,7 +98,7 @@ void SColorPalette::GenerateColorBlocks()
 {
 	PaletteWrapBox->ClearChildren();
 	
-	for (auto& Color : ColorPalette.Get().PaletteColors)
+	for (auto& ColorData : ColorPalette.Get().PaletteColorsData)
 	{
 		PaletteWrapBox->AddSlot()
 		[
@@ -106,7 +106,8 @@ void SColorPalette::GenerateColorBlocks()
 			.Padding(2.f)
 			[
 				SNew(SColorPaletteBlock)
-				.Color(Color)
+				.Color(ColorData.Color)
+				.OptionalName(ColorData.OptionalName)
 				.OnSelectColor(OnSelectColor)
 			]
 		];

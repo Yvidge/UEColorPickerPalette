@@ -6,6 +6,21 @@
 #include "Math/Color.h"
 #include "ColorPaletteRuntimeTypes.generated.h"
 
+USTRUCT(BlueprintType)
+struct FColorPaletteColorData
+{
+	GENERATED_BODY()
+
+	FColorPaletteColorData() { }
+	FColorPaletteColorData(FLinearColor Color) : Color(Color) { }
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
+	FLinearColor Color;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
+	FText OptionalName;
+};
+
 
 USTRUCT(BlueprintType)
 struct FColorPalette
@@ -18,10 +33,12 @@ struct FColorPalette
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
 	FText PaletteDescription;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
-	TArray<FLinearColor> PaletteColors;
-};
+	UPROPERTY(meta=(DeprecatedProperty, DeprecationMessage="PaletteColors are deprecated. Use PaletteColorsData instead"))
+	TArray<FLinearColor> PaletteColors_DEPRECATED;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
+	TArray<FColorPaletteColorData> PaletteColorsData;
+};
 
 /**
  * Empty wrapper for linear color that will summon color picker with only registered colors.

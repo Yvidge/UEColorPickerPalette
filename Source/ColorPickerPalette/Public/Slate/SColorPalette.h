@@ -6,6 +6,7 @@
 #include "ColorPaletteRuntimeTypes.h"
 #include "ColorPickerPaletteUserData.h"
 #include "Widgets/SCompoundWidget.h"
+#include "Widgets/Input/SButton.h"
 
 class SWrapBox;
 /**

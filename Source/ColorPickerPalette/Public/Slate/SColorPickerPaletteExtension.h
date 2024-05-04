@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SColorPalette.h"
 #include "Widgets/SCompoundWidget.h"
 
 class SScrollBox;

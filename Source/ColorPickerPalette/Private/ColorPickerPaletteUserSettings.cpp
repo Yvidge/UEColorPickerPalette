@@ -20,6 +20,7 @@ void UColorPickerPaletteUserSettings::PostCDOContruct()
 	Super::PostCDOContruct();
 
 	RegenerateUserData();
+	TryReconstuctColorsData();
 
 	GetMutableDefault<UColorPickerPaletteDeveloperSettings>()->OnSettingChanged().AddWeakLambda(this, [this](UObject*, FPropertyChangedEvent&)
 	{
@@ -44,6 +45,29 @@ void UColorPickerPaletteUserSettings::RegenerateUserData()
 		if(!PalettesUserData.Contains(Palette.Key))
 		{
 			PalettesUserData.Add(Palette.Key);
+		}
+	}
+
+	SaveConfig();
+}
+
+void UColorPickerPaletteUserSettings::TryReconstuctColorsData()
+{
+	auto& RegisteredPalettes = UColorPickerPaletteDeveloperSettings::GetMutable()->RegisteredPalettes;
+
+	for (auto& RegisteredPalette : RegisteredPalettes)
+	{
+		TArray<FLinearColor>& OldLinearColors = RegisteredPalette.Value.PaletteColors_DEPRECATED;
+		TArray<FColorPaletteColorData>& ColorPaletteColorData = RegisteredPalette.Value.PaletteColorsData;
+
+		if(!OldLinearColors.IsEmpty() && ColorPaletteColorData.IsEmpty())
+		{
+			for (const FLinearColor& LinearColor : OldLinearColors)
+			{
+				ColorPaletteColorData.Add(FColorPaletteColorData(LinearColor));
+			}
+
+			OldLinearColors.Empty();
 		}
 	}
 

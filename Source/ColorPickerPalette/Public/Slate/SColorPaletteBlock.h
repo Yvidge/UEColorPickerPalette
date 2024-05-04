@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SColorPalette.h"
 #include "Widgets/SCompoundWidget.h"
 
 /**
@@ -22,7 +23,10 @@ public:
 			
 		/** Event called when this block is clicked */
 		SLATE_EVENT(FOnLinearColorValueChanged, OnSelectColor)
-			
+
+		/** Optional name for this Color */
+		SLATE_ATTRIBUTE(FText, OptionalName)
+		
 		/** Whether to display sRGB color */
 		SLATE_ATTRIBUTE(bool, UseSRGB)
 
@@ -34,11 +38,15 @@ public:
 protected:
 	virtual FReply OnMouseButtonDown( const FGeometry& MyGeometry, const FPointerEvent& MouseEvent ) override;
 
+	FText GetColorFinalText() const;
+	FText GetOptionalName() const;
 	FText GetColorHexText() const;
 	FLinearColor GetColor() const;
 
 protected:
 	TAttribute<FLinearColor> Color;
+
+	TAttribute<FText> OptionalName;
 	
 	/** Event called when this block is clicked */
 	FOnLinearColorValueChanged OnSelectColor;

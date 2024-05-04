@@ -19,8 +19,9 @@ void SColorPaletteBlock::Construct(const FArguments& InArgs)
 {
 	Color = InArgs._Color;
 	OnSelectColor = InArgs._OnSelectColor;
+	OptionalName = InArgs._OptionalName;
 	bUseSRGB = InArgs._UseSRGB;
-
+	
 	const FSlateFontInfo SmallLayoutFont = FAppStyle::Get().GetFontStyle("Regular");
 	const FSlateFontInfo SmallLabelFont = FAppStyle::Get().GetFontStyle("Bold");
 	
@@ -45,10 +46,17 @@ void SColorPaletteBlock::Construct(const FArguments& InArgs)
 		]
 		+ SVerticalBox::Slot()
 		.Padding(2)
-		.HAlign(HAlign_Center)
+		.HAlign(HAlign_Fill)
 		[
-			SNew(STextBlock)
-			.Text(this, &SColorPaletteBlock::GetColorHexText)
+			SNew(SBox)
+			.WidthOverride(95.f)
+			.HAlign(HAlign_Center)
+			[
+				SNew(STextBlock)
+				.Text(this, &SColorPaletteBlock::GetColorFinalText)
+				.OverflowPolicy(ETextOverflowPolicy::Ellipsis)
+				.Clipping(EWidgetClipping::OnDemand)
+			]
 		]
 		
 	];
@@ -62,6 +70,16 @@ FReply SColorPaletteBlock::OnMouseButtonDown(const FGeometry& MyGeometry, const 
 		return FReply::Handled();
 	}
 	return FReply::Unhandled();
+}
+
+FText SColorPaletteBlock::GetColorFinalText() const
+{
+	return OptionalName.Get().IsEmpty() ? GetColorHexText() : GetOptionalName();
+}
+
+FText SColorPaletteBlock::GetOptionalName() const
+{
+	return OptionalName.Get();
 }
 
 FText SColorPaletteBlock::GetColorHexText() const

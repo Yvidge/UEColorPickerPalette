@@ -17,6 +17,7 @@ class COLORPICKERPALETTERUNTIME_API UColorPickerPaletteDeveloperSettings : publi
 
 public:
 	static const UColorPickerPaletteDeveloperSettings* Get();
+	static UColorPickerPaletteDeveloperSettings* GetMutable();
 
 public:
 	UPROPERTY(Config, EditAnywhere, BlueprintReadWrite, Category = "General")

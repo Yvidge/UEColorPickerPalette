@@ -11,9 +11,9 @@ bool UColorPickerPaletteUtils::IsLinearColorRegistered(const FLinearColor& Color
 {
 	for (const auto& RegisteredPalette : GetRegisteredPalettes())
 	{
-		for (const FLinearColor& RegisteredColor : RegisteredPalette.Value.PaletteColors)
+		for (const auto& RegisteredColorData : RegisteredPalette.Value.PaletteColorsData)
 		{
-			if(RegisteredColor == Color)
+			if(RegisteredColorData.Color == Color)
 			{
 				return true;
 			}
@@ -27,9 +27,9 @@ bool UColorPickerPaletteUtils::IsColorRegistered(const FColor& Color, bool bSRGB
 {
 	for (const auto& RegisteredPalette : GetRegisteredPalettes())
 	{
-		for (const FLinearColor& RegisteredColor : RegisteredPalette.Value.PaletteColors)
+		for (const auto& RegisteredColorData : RegisteredPalette.Value.PaletteColorsData)
 		{
-			if(RegisteredColor.ToFColor(bSRGB) == Color)
+			if(RegisteredColorData.Color.ToFColor(bSRGB) == Color)
 			{
 				return true;
 			}

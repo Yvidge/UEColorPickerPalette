@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ColorPickerPaletteUserData.h"
 #include "Engine/DeveloperSettings.h"
 #include "ColorPickerPaletteUserSettings.generated.h"
 
@@ -25,6 +26,8 @@ public:
 	
 	// Clear invalid ones and add missing entries for PalettesUserData config
 	void RegenerateUserData();
+	// Reconstruct Colors Data array from deprecated property
+	void TryReconstuctColorsData();
 	void SaveConfig();
 
 public:
