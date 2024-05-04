@@ -226,6 +226,11 @@ void FColorStructPaletteCustomization::OnColorPickerWindowDeactivated()
 			FTimerDelegate Delegate;
 			Delegate.BindLambda([this]()
 			{
+				if(!this)
+				{
+					return;
+				}
+				
 				if(ColorPickerWindow.IsValid())
 				{
 					ColorPickerWindow.Pin()->RequestDestroyWindow();
@@ -234,6 +239,16 @@ void FColorStructPaletteCustomization::OnColorPickerWindowDeactivated()
 			});
 			GWorld->GetTimerManager().SetTimer(WindowDestroyTimer, Delegate, 0.1f, false);
 		}
+	}
+}
+
+void FColorStructPaletteCustomization::OnColorPickerWindowDestroyed(const TSharedRef<SWindow>& Window)
+{
+	if(GWorld)
+	{
+		GWorld->GetTimerManager().ClearTimer(WindowDestroyTimer);
+		Window.Get().GetOnWindowClosedEvent().RemoveAll(this);
+		Window.Get().GetOnWindowDeactivatedEvent().RemoveAll(this);
 	}
 }
 
@@ -291,10 +306,20 @@ void FColorStructPaletteCustomization::CreateColorPickerWithPalette()
 	}
 	
 	Window.Get()->GetOnWindowDeactivatedEvent().AddRaw(this, &FColorStructPaletteCustomization::OnColorPickerWindowDeactivated);
+	Window.Get()->GetOnWindowClosedEvent().AddRaw(this, &FColorStructPaletteCustomization::OnColorPickerWindowDestroyed);
 	
 	WindowContent->SetContent(CreateCustomizationWidget(Window));
-	
-	FSlateApplication::Get().AddWindow(Window.ToSharedRef());
+
+	// Special case for Sequencer
+	const TSharedPtr<SWindow> TopLevelWindow = FSlateApplication::Get().GetActiveTopLevelWindow();
+	if(TopLevelWindow && TopLevelWindow->GetParentWindow().IsValid() && TopLevelWindow->GetParentWindow()->GetParentWindow().IsValid())
+	{
+		FSlateApplication::Get().AddModalWindow(Window.ToSharedRef(), FSlateApplication::Get().GetActiveTopLevelWindow()->GetParentWindow()->GetParentWindow());
+	}
+	else
+	{
+		FSlateApplication::Get().AddWindow(Window.ToSharedRef());
+	}
 	
 	ColorPickerWindow = Window;
 }

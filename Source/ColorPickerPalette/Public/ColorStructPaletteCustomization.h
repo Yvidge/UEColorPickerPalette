@@ -34,6 +34,7 @@ protected:
 	FReply OnMouseButtonDownColorBlock(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent);
 
 	void OnColorPickerWindowDeactivated();
+	void OnColorPickerWindowDestroyed(const TSharedRef<SWindow>& Window);
 
 	void CreateColorPickerWithPalette();
 	virtual TSharedRef<SWidget> CreateCustomizationWidget(TSharedPtr<SWindow> Window);
